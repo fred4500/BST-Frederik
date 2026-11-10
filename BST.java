@@ -112,10 +112,30 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
         }
         return null;
     }
+
+    private int heightFrom(Treeable<E> node){
+        if(node.getLeft() == null && node.getRight() == null){
+            return 1;
+        }
+
+        if(node.getLeft() == null){
+            return 1+ heightFrom(node.getRight());
+        }
+
+        if(node.getRight() == null){
+            return 1 + heightFrom(node.getLeft());
+        }
+
+        int heightLeft = heightFrom(node.getLeft());
+        int heightRight = heightFrom(node.getRight());
+        if(heightLeft > heightRight){
+            return 1+ heightLeft;
+        }
+        return 1+ heightRight;
+    }
     
-    public int height()
-    {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+    public int height() {
+        return heightFrom(rootNode);
     }
 
     public int calculateLevels()
@@ -282,7 +302,7 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     }
 
     //returns the BstNode that contains a given value, or unll if no such BstNode exists
-    public Treeable findNode(E item)
+    public Treeable<E> findNode(E item)
     {
         throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
     }
@@ -306,9 +326,15 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     }
 
     //return the number of nodes in the BST
+    private int sizeFrom(Treeable<E> node){
+        if(node == null){
+            return 0;
+        }
+        return sizeFrom(node.getRight()) + sizeFrom(node.getLeft()) + 1;
+    }
     public int size()
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST"); 
+        return sizeFrom(rootNode);
     }
 
     public void rebalance()
