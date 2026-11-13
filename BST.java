@@ -171,7 +171,12 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
 
     private void inOrderList(Treeable<E> start, List<E> listOfNodes)
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+        if(start == null){
+            return;
+        }
+        inOrderList(start.getLeft(), listOfNodes);
+        listOfNodes.add(start.getValue());
+        inOrderList(start.getRight(), listOfNodes);
     }
 
     public ArrayList<E> preOrderList()
@@ -183,7 +188,12 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
 
     private void preOrderList(Treeable<E> start, ArrayList<E> listOfNodes)
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+        if(start == null){
+            return;
+        }
+        listOfNodes.add(start.getValue());
+        preOrderList(start.getLeft(), listOfNodes);
+        preOrderList(start.getRight(), listOfNodes);
     }
 
     public ArrayList<E> postOrderList()
@@ -194,9 +204,14 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
 
     }
 
-    private void postOrderList(Treeable start, ArrayList<E> listOfNodes)
+    private void postOrderList(Treeable<E> start, ArrayList<E> listOfNodes)
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+        if(start == null){
+            return;
+        }
+        postOrderList(start.getLeft(), listOfNodes);
+        postOrderList(start.getRight(), listOfNodes);
+        listOfNodes.add(start.getValue());
     }
 
     public ArrayList<E> levelOrderList()
@@ -334,8 +349,19 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     }        
 
     private void range(Treeable<E> start, E lowBound, E highBound, ArrayList<E> listOfNodes)
-    {    
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");        
+    {
+        if(start == null){
+            return;
+        }
+        range(start.getLeft(), lowBound, highBound, listOfNodes);
+        if(start.getValue().compareTo(highBound)>0){
+            return;
+        }
+        if(start.getValue().compareTo(lowBound)>=0){
+            listOfNodes.add(start.getValue());
+        }
+        range(start.getRight(), lowBound, highBound, listOfNodes);
+
     }
     private void pathToNode(E i, String ans, Treeable<E> node){
         ans += node.getValue();
