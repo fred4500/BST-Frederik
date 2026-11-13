@@ -135,6 +135,9 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     }
     
     public int height() {
+        if(rootNode == null){
+            throw new UnsupportedOperationException("No tree");
+        }
         return heightFrom(rootNode);
     }
 
@@ -298,13 +301,28 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     //returns true if given element is found
     public boolean contains(E i)
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+        return findNode(i) != null;
+    }
+
+    public Treeable<E> findNodeFrom(Treeable<E> node, E item){
+        if(node.getValue().equals(item)){
+            System.out.println("returning: " + item + " and " + node.getValue());
+            return node;
+        }
+        if(node.getLeft() == null && node.getRight() == null){
+            return null;
+        }
+        if(node.getValue().compareTo(item) < 0){
+            return findNodeFrom(node.getRight(), item);
+        }
+        return findNodeFrom(node.getLeft(), item);
     }
 
     //returns the BstNode that contains a given value, or unll if no such BstNode exists
     public Treeable<E> findNode(E item)
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+        System.out.println("starting");
+        return findNodeFrom(rootNode, item);
     }
 
     public ArrayList<E> range(E lowBound, E highBound)
@@ -319,10 +337,25 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     {    
         throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");        
     }
+    private void pathToNode(E i, String ans, Treeable<E> node){
+        ans += node.getValue();
+        System.out.println(ans);
+        if(node.getValue().equals(i)){
+            return;
+        }
+        if(node.getValue().compareTo(i)<0){
+            pathToNode(i,ans,node.getRight());
+            return;
+        }
+        pathToNode(i,ans,node.getLeft());
+    }
 
     public String pathToNode(E i)
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST"); 
+        System.out.println("here");
+        String ans = "";
+        pathToNode(i, ans, rootNode);
+        return ans;
     }
 
     //return the number of nodes in the BST
@@ -354,13 +387,32 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
         throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
     }  
 
+    private Treeable<E> minValueFrom(Treeable<E> node){
+        if(node.getLeft() == null){
+            return node;
+        }
+        return minValueFrom(node.getLeft());
+    }
     public E minValue()
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+        if(rootNode == null){
+            throw new UnsupportedOperationException("No tree");
+        }
+        return minValueFrom(rootNode).getValue();
+    }
+
+    private Treeable<E> maxValueFrom(Treeable<E> node){
+        if(node.getRight() == null){
+            return node;
+        }
+        return maxValueFrom(node.getRight());
     }
 
     public E maxValue()
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+        if(rootNode == null){
+            throw new UnsupportedOperationException("No tree");
+        }
+        return maxValueFrom(rootNode).getValue();
     }
 }
