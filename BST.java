@@ -88,7 +88,38 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     // recalculates levels
     public void removeNode(E item)
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");       
+       Treeable<E> node = findNode(item);
+       if(node == null){
+           throw new IllegalArgumentException(item + " not in the list");
+       }
+       if(node.getLeft() == null && node.getRight() == null){
+           System.out.println("No childern");
+           Treeable<E> parrent = parentOf(node);
+           if(parrent.getValue().compareTo(item) < 0){
+               System.out.println("removing right");
+               parrent.setRight(null);
+           }
+           else{
+               System.out.println("removing left");
+               parrent.setLeft(null);
+           }
+           return;
+       }
+       if(node.getRight() != null && node.getLeft() != null){
+           System.out.println("2 children");
+           Treeable<E> min = minValueFrom(node);
+           removeNode(min.getValue());
+           node.setValue(min.getValue());
+           return;
+       }
+        System.out.println("1 childern");
+        Treeable<E> parrent = parentOf(node);
+        if(parrent.getValue().compareTo(item) < 0){
+            parrent.setRight(null);
+        }
+        else{
+            parrent.setLeft(null);
+        }
     }
     //returns parent BstNode of given BstNode.
     private Treeable<E> parentOf(Treeable<E> child)
@@ -337,6 +368,9 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     public Treeable<E> findNode(E item)
     {
         System.out.println("starting");
+        if(rootNode == null){
+            throw new IllegalArgumentException("No tree");
+        }
         return findNodeFrom(rootNode, item);
     }
 
