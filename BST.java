@@ -60,11 +60,9 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
                 { //create a new node referenced with currentNode.rightNode
                     currentNode.setRight(new BstNode(item));
                     finished = true;
-                    System.out.println("added to right");
                 }
                 else { //keep looking right
                     currentNode = currentNode.getRight();
-                     System.out.println("moving right");
                     }
             }
             else if (item.compareTo(currentNode.getValue()) < 0)
@@ -73,11 +71,9 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
                 { //create a new node referenced with currentNode.leftNode
                     currentNode.setLeft(new BstNode(item));
                     finished = true;
-                    System.out.println("added to left");
                 }
                 else { //keep looking left
                     currentNode = currentNode.getLeft();
-                     System.out.println("moving left");
                     }
             }
             else throw new IllegalArgumentException(item + " is alreaady in the BST and cannot be added.");
@@ -93,26 +89,21 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
            throw new IllegalArgumentException(item + " not in the list");
        }
        if(node.getLeft() == null && node.getRight() == null){
-           System.out.println("No childern");
            Treeable<E> parrent = parentOf(node);
            if(parrent.getValue().compareTo(item) < 0){
-               System.out.println("removing right");
                parrent.setRight(null);
            }
            else{
-               System.out.println("removing left");
                parrent.setLeft(null);
            }
            return;
        }
-       if(node.getRight() != null && node.getLeft() != null){
-           System.out.println("2 children");
+       if(node.getRight() != null && node.getLeft() != null) {
            Treeable<E> min = minValueFrom(node);
            removeNode(min.getValue());
            node.setValue(min.getValue());
            return;
        }
-        System.out.println("1 childern");
         Treeable<E> parrent = parentOf(node);
         if(parrent.getValue().compareTo(item) < 0){
             parrent.setRight(null);
@@ -342,7 +333,15 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     }
 
     private boolean isBalanced(Treeable currentNode){
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+        if(currentNode == null){
+            return true;
+        }
+        else if(Math.abs(sizeFrom(currentNode.getLeft()) - sizeFrom(currentNode.getRight()))>1){
+            return false;
+        }
+        else{
+            return (isBalanced(currentNode.getLeft()) && isBalanced(currentNode.getRight()));
+        }
     }
     //returns true if given element is found
     public boolean contains(E i)
@@ -352,7 +351,6 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
 
     public Treeable<E> findNodeFrom(Treeable<E> node, E item){
         if(node.getValue().equals(item)){
-            System.out.println("returning: " + item + " and " + node.getValue());
             return node;
         }
         if(node.getLeft() == null && node.getRight() == null){
@@ -367,7 +365,6 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     //returns the BstNode that contains a given value, or unll if no such BstNode exists
     public Treeable<E> findNode(E item)
     {
-        System.out.println("starting");
         if(rootNode == null){
             throw new IllegalArgumentException("No tree");
         }
@@ -399,7 +396,6 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     }
     private void pathToNode(E i, String ans, Treeable<E> node){
         ans += node.getValue();
-        System.out.println(ans);
         if(node.getValue().equals(i)){
             return;
         }
@@ -412,7 +408,6 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
 
     public String pathToNode(E i)
     {
-        System.out.println("here");
         String ans = "";
         pathToNode(i, ans, rootNode);
         return ans;
@@ -444,7 +439,13 @@ public class BST<E extends Comparable<E>/*, T extends Treeable<E>*/>
     //adds the values from ArrayList<E> values starting at position start and going to position end, to the BST
     private void bstFromList(ArrayList<E> values, int start, int end)
     {
-        throw new UnsupportedOperationException("not implemented.  Please implement this method in BST");
+        int mid =(start+end)/2;
+        if(start > end){
+            return;
+        }
+        this.addNode(values.get(mid));
+        bstFromList(values, start, mid-1);
+        bstFromList(values, mid+1, end);
     }  
 
     private Treeable<E> minValueFrom(Treeable<E> node){
